@@ -1,0 +1,69 @@
+.container{
+    padding-top: 20px;
+    border-bottom: 1px solid #e8e7e7;
+}
+
+.astar-grid .dice{
+    height: 100px;
+    padding: 10px;
+    background-color: #d9efee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+    border: 1px dashed #ccc;
+}
+
+.control-panel{
+    display: flex;
+    flex-direction: column;
+}
+
+.control-panel .settings .rows-cols{
+    display: inline-block;
+    width: 60px;
+}
+
+.control-panel .settings .set-rows-cols{
+    margin-top: 5px;
+}
+
+.legend{
+    /* margin-top: 20px; */
+}
+
+.legend .fa,
+.dice .fa{
+    font-size: 20px;
+}
+
+.settings,
+.elements,
+.execute{
+    margin-bottom: 10px;
+}
+
+.elements .item,
+.execute .item,
+.tutorial .item{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    margin: 5px 0;
+}
+
+footer{
+    font-size: 11px;
+    padding: 10px 0;
+    text-align: center;
+    color: #828282;
+}
+footer .f-row{
+    margin: 2px 0;
+}
+
+a{
+    text-decoration: none !important;
+}

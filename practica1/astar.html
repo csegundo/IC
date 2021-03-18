@@ -40,22 +40,22 @@
         <div class="row">
             <!-- Canvas -->
             <div class="col-md-8">
-                <div class="row astar-grid">
-                    <div class="col-4 dice"><i class="fa fa-car"></i></div>
-                    <div class="col-4 dice"><i class="fa fa-map-marker"></i></div>
-                    <div class="col-4 dice"></div>
-                    <div class="col-4 dice"></div>
-                    <div class="col-4 dice"><i class="fa fa-tree"></i></div>
-                    <div class="col-4 dice"><i class="fa fa-map-marker"></i></div>
-                    <div class="col-4 dice"></div>
-                    <div class="col-4 dice"><i class="fa fa-tree"></i></div>
-                    <div class="col-4 dice"><i class="fa fa-map-marker"></i></div>
-                    <div class="col-4 dice"></div>
-                    <div class="col-4 dice"><i class="fa fa-tree"></i></div>
-                    <div class="col-4 dice"><i class="fa fa-map-marker"></i></div>
-                    <div class="col-4 dice"></div>
-                    <div class="col-4 dice"><i class="fa fa-tree"></i></div>
-                    <div class="col-4 dice"><i class="fa fa-flag-checkered"></i></div>
+                <div class="row astar-canvas">
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-car"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-map-marker"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""></div>
+                    <div class="col-4 dice" data-row="" data-col=""></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-tree"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-map-marker"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-tree"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-map-marker"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-tree"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-map-marker"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-tree"></i></div>
+                    <div class="col-4 dice" data-row="" data-col=""><i class="fa fa-flag-checkered"></i></div>
                 </div>
             </div>
 
@@ -66,9 +66,9 @@
                     <div class="settings">
                         <h3>Ajustes del algoritmo</h3>
                         <div>
-                            <input type="number" class="form-control rows-cols" min="1" max="12" value="1" data-action="rows">
+                            <input type="number" class="form-control rows-cols" min="1" max="12" value="5" data-action="rows">
                             filas y 
-                            <input type="number" class="form-control rows-cols" min="1" max="12" value="1" data-action="cols">
+                            <input type="number" class="form-control rows-cols" min="1" max="12" value="3" data-action="cols">
                             columnas
                             <button class="btn btn-primary btn-sm btn-block set-rows-cols">Establecer <i class="fa fa-check-circle-o"></i></button>
                         </div>
@@ -78,40 +78,31 @@
                         <h3>Elementos</h3>
                         <div class="item">
                             <span>Inicio <i class="fa fa-car"></i></span>
-                            <button class="btn btn-secondary btn-sm">Colocar</button>
+                            <button class="btn btn-secondary btn-sm" data-action="1">Colocar</button>
                         </div>
                         <div class="item">
                             <span>Meta <i class="fa fa-flag-checkered"></i></span>
-                            <button class="btn btn-secondary btn-sm">Colocar</button>
+                            <button class="btn btn-secondary btn-sm" data-action="2">Colocar</button>
                         </div>
                         <div class="item">
                             <span>Obstáculo <i class="fa fa-tree"></i></span>
-                            <button class="btn btn-secondary btn-sm">Colocar</button>
+                            <button class="btn btn-secondary btn-sm" data-action="3">Colocar</button>
                         </div>
                     </div>
 
                     <div class="execute">
                         <h3>Iniciar el algoritmo</h3>
                         <div class="item">
-                            <button class="btn btn-success btn-sm">Iniciar <i class="fa fa-play"></i></button>
-                            <button class="btn btn-info btn-sm">Parar <i class="fa fa-stop"></i></button>
-                            <button class="btn btn-danger btn-sm">Resetear <i class="fa fa-refresh fa-spin"></i></button>
+                            <button class="btn btn-success btn-sm start">Iniciar <i class="fa fa-play"></i></button>
+                            <button class="btn btn-danger btn-sm reset">Resetear <i class="fa fa-refresh fa-spin"></i></button>
                         </div>
                     </div>
 
                     <div class="tutorial">
                         <h3>Cómo usar la herramienta</h3>
                         <div class="item">
-                            <span>Ajustes</span>
-                            <button class="btn btn-light btn-sm">Info. <i class="fa fa-info"></i></button>
-                        </div>
-                        <div class="item">
-                            <span>Elementos</span>
-                            <button class="btn btn-light btn-sm">Info. <i class="fa fa-info"></i></button>
-                        </div>
-                        <div class="item">
-                            <span>Lienzo</span>
-                            <button class="btn btn-light btn-sm">Info. <i class="fa fa-info"></i></button>
+                            <span>Información general</span>
+                            <button class="btn btn-light btn-sm info">Info. <i class="fa fa-info"></i></button>
                         </div>
                     </div>
                 </div>
@@ -151,7 +142,7 @@
     </div>
 
     <footer>
-        <div class="f-row">Ingeniería del Coocimiento | Facultad de Informática | Universidad Complutense de Madrid</div>
+        <div class="f-row">Ingeniería del Conocimiento | Facultad de Informática | Universidad Complutense de Madrid</div>
         <div class="f-row">Carlos Segundo, Emma Talavera, David Fernández y José Otegui</div>
         <div class="f-row">&copy; 2021</div>
         <div class="f-row">

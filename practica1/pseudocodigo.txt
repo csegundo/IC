@@ -1,0 +1,36 @@
+* f(n) = h(n) + g(n)
+    - g(n) = distancia al nodo actual
+    - h(n) = distancia al nodo meta
+
+----------------------------------------
+ABIERTA => ordenada por f(n) (minimo)
+
+1. Colocar INICIO en la ABIERTA
+2. Colocar OBSTACULOS en CERRADA
+
+while
+    3. 
+    X = pop() a ABIERTA
+    CERRADA.push(X)
+    
+    if X == META
+        sacar sus antecesores y calcular la solucion
+        break
+    else
+        actualizar su coste
+        4. Y = sacar todos los sucesores de X
+
+        for each Y -> y
+            aux = f(n) -> ahora toca ir viendo que lista(s) esta
+
+            if y NOT in CERRADA
+                calcular su h(y)
+
+                if NOT in CERRADA y NOT in ABIERTA
+                    poner sucesores en ABIERTA
+                    asignar punteros a n
+
+                else if in ABIERTA
+                    sacar el MIN de la f(n) que ya estaba en ABIERTA y compararla con la que se ha calculado recientemente (linea 24)
+                    y actualizarlo
+

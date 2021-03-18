@@ -3,5 +3,133 @@
  */
 
 $(function(){
+    let tablero = [],
+        itemStatus = {
+            START       : 1,
+            FINISH      : 2,
+            OBSTACLE    : 3
+        },
+        status = 0,
+        defaultSettings = {
+            rows    : 5,
+            cols    : 3,
+            colSize : 12 / 3
+        };
 
+    $('.set-rows-cols').click(function(){
+        var _rows = $('input[data-action="rows"]').val(),
+            _cols = $('input[data-action="cols"]').val();
+        
+        // Construir el tablero y la matriz para el algoritmo
+        _rows = parseInt(_rows);
+        _cols = parseInt(_cols);
+        var _canvas = $('.astar-canvas'),
+            tamCol = 12 / _cols;
+
+        _canvas.html('');
+        for(var i = 0; i < _rows; i++){
+            tablero[i] = [];
+            for(var j = 0; j < _cols; j++){
+                _canvas.append(`<div class="col-${tamCol} dice" data-row="${i}" data-col="${j}"></div>`);
+                tablero[i][j] = {
+                    antecesor   : '',
+                    dAcumulada  : 0,
+                    dEstimada   : 0
+                };
+            }
+        }
+
+        // console.log('TABLERO:', tablero);
+    });
+
+    // Añadir elementos al tablero
+    $('.control-panel .elements button').click(function(){
+        var action = $(this).data().action;
+
+        switch(action){
+            case 1: status = itemStatus.START; break;
+            case 2: status = itemStatus.FINISH; break;
+            case 3: status = itemStatus.OBSTACLE; break;
+            default: break;
+        }
+    });
+    $('.astar-canvas').on('click', '.dice', function(){
+        var item = '';
+
+        switch(status){
+            case 1: item = 'car'; break;
+            case 2: item = 'flag-checkered'; break;
+            case 3: item = 'tree'; break;
+            default: break;
+        }
+
+        if(item){
+            $(this).html(`<i class="fa fa-${item}"></i>`);
+        }
+
+        // Deshabiolitamos los botones de inicio o fin si ya se han colocado
+        if(status == itemStatus.START || status == itemStatus.FINISH){
+            $(`button[data-action="${status}"]`).attr('disabled', true);
+        }
+
+        // Reseteamos el status general: si es obstaculo no lo reseteamos para que sea mas sencillo de colocar
+        if(status != itemStatus.OBSTACLE)
+            status = 0;
+        
+    });
+
+    // Boton reset all
+    $('.control-panel .execute .reset').click(function(){
+        $('.control-panel .elements button').attr('disabled', false);
+        $('input[data-action="rows"]').val(5);
+        $('input[data-action="cols"]').val(3);
+        $('.astar-canvas').html('');
+
+        for(var i = 0; i < defaultSettings.rows; i++){
+            tablero[i] = [];
+            for(var j = 0; j < defaultSettings.cols; j++){
+                $('.astar-canvas').append(`<div class="col-${defaultSettings.colSize} dice" data-row="${i}" data-col="${j}"></div>`);
+                tablero[i][j] = {
+                    antecesor   : '',
+                    dAcumulada  : 0,
+                    dEstimada   : 0
+                };
+            }
+        }
+    });
+
+    // Boton de ayuda
+    $('.control-panel .tutorial .info').click(function(){
+        var popup_main = `<div class="popup"></div>`,
+            popup_content = `<div class="popup-content"></div>`,
+            popup_header =
+            `<div class="popup-header">
+                <span class="title">Cómo usar la herramienta <i class="fa fa-question"></i></span>
+                <span class="popup-close"><i class="fa fa-times"></i></span>
+            </div>`,
+            popup_body =
+            `<div class="popup-body">
+                <ul>
+                <li>Para establecer el número de filas y columnas basta con ajustar el nº de filas y columnas de darle al boton "Establecer <i class="fa fa-check-circle-o"></i>".</li>
+                <li>Para colocar elementos basta con hacer click en el botón "Colocar" y pinchar en una celda para colocarlo. Para el inicio y la meta solo se podrá colocar UNA vez, mientras que los obtáculos
+                se pueden colocar múltiples veces</li>
+                <il>Para los obstáculos puedes pinchar una sola vez en el botón y empezar a colocar sin tener que volver a darle.</li>
+                <li>Para iniciar el algoritmo basta con pulsar el botón de "Iniciar <i class="fa fa-play"></i>".</li>
+                <li>Para reiniciar la aplicación a su estado inicial basta con pulsas el botón de "Resetear <i class="fa fa-refresh fa-spin"></i>" o bien pulsar <kbd>F5</kbd>.</li>
+                </ul>
+            </div>`,
+            popup_footer =
+            `<div class="popup-actions">
+                <button class="btn btn-primary btn-sm popup-close"><i class="fa fa-times"></i> Cerrar</button>
+            </div>`;
+
+        $('body').append(popup_main);
+        $('.popup').html(popup_content);
+        $('.popup-content').html(popup_header);
+        $('.popup-content').append(popup_body);
+        $('.popup-content').append(popup_footer);
+        $('.popup .popup-close').click(function(){
+            $(this).parents('.popup').remove();
+        });
+    });
 });

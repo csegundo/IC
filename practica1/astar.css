@@ -127,3 +127,12 @@ a{
 .popup ul{
     padding-left: 20px;
 }
+
+.rem-overflow{
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+}
+.set-overflow{
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+}

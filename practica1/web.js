@@ -34,12 +34,39 @@ $(function(){
                 tablero[i][j] = {
                     antecesor   : '',
                     dAcumulada  : 0,
-                    dEstimada   : 0
+                    dEstimada   : 0,
+                    coord       : { 'x' : i, 'y' : j }
                 };
             }
         }
 
         // console.log('TABLERO:', tablero);
+    });
+
+    // Boton de INICIAR EL ALGORITMO
+    $('.control-panel .execute .start').click(function(){
+        var _canvas = $('.astar-canvas');
+        /*var inicio = $('.astar-canvas .dice .start'),
+            fin = $('.astar-canvas .dice .end'),
+            obstaculos = $('.astar-canvas .dice .obstacle');
+        
+        inicio = inicio.parents('.dice').data();
+        inicio = { 'x' : inicio.row, 'y' : inicio.col };
+        fin = fin.parents('.dice').data();
+        fin = { 'x' : fin.row, 'y' : fin.col };
+        var obs = [];
+
+        $.each(obstaculos, function(i, obstaculo){
+            obstaculo = $(obstaculo).parents('.dice').data();
+            obs.push({ 'x' : obstaculo.row, 'y' : obstaculo.col });
+        });
+
+        let MEJOR_CAMINO = astarSearch(tablero, inicio, fin, obs);*/
+        let MEJOR_CAMINO = [{ 'x' : 0, 'y' : 1 }, { 'x' : 1, 'y' : 2 }, { 'x' : 2, 'y' : 0 }]; // prueba
+
+        $.each(MEJOR_CAMINO, function(i, item){
+            _canvas.find('.dice[data-row="' + item.x + '"][data-col="' + item.y + '"]').html('<i class="fa fa-map-marker"></i>');
+        });
     });
 
     // Añadir elementos al tablero
@@ -57,9 +84,9 @@ $(function(){
         var item = '';
 
         switch(status){
-            case 1: item = 'car'; break;
-            case 2: item = 'flag-checkered'; break;
-            case 3: item = 'tree'; break;
+            case 1: item = 'car start'; break;
+            case 2: item = 'flag-checkered end'; break;
+            case 3: item = 'tree obstacle'; break;
             default: break;
         }
 
@@ -92,7 +119,8 @@ $(function(){
                 tablero[i][j] = {
                     antecesor   : '',
                     dAcumulada  : 0,
-                    dEstimada   : 0
+                    dEstimada   : 0,
+                    coord       : { 'x' : i, 'y' : j }
                 };
             }
         }
@@ -123,12 +151,15 @@ $(function(){
                 <button class="btn btn-primary btn-sm popup-close"><i class="fa fa-times"></i> Cerrar</button>
             </div>`;
 
+        $('body').removeClass('set-overflow').addClass('rem-overflow');
         $('body').append(popup_main);
         $('.popup').html(popup_content);
         $('.popup-content').html(popup_header);
         $('.popup-content').append(popup_body);
         $('.popup-content').append(popup_footer);
         $('.popup .popup-close').click(function(){
+            $('body').css('overflow-x', 'auto');
+            $('body').removeClass('rem-overflow').addClass('set-overflow');
             $(this).parents('.popup').remove();
         });
     });

@@ -74,7 +74,7 @@ $(function(){
                                         ABIERTA[ABIERTA.indexOf(YAnterior)] = Y;
                                     }
                                 }
-
+ 
                                 //Ordenar ABIERTA por menor dAcumulada
                                 ABIERTA.sort(function (a, b) {
                                     if (a.dAcumulada > b.dAcumulada) {

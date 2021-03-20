@@ -34,13 +34,14 @@ $(function(){
                 tablero[i][j] = {
                     antecesor   : '',
                     dAcumulada  : 0,
-                    dEstimada   : 0,
+                    valorAcumAristas : 0,
+                    dMeta       : 0,
                     coord       : { 'x' : i, 'y' : j }
                 };
             }
         }
 
-        // console.log('TABLERO:', tablero);
+        console.log('TABLERO:', tablero);
     });
 
     // Boton de INICIAR EL ALGORITMO
@@ -119,7 +120,8 @@ $(function(){
                 tablero[i][j] = {
                     antecesor   : '',
                     dAcumulada  : 0,
-                    dEstimada   : 0,
+                    valorAcumAristas : 0,
+                    dMeta       : 0,
                     coord       : { 'x' : i, 'y' : j }
                 };
             }

@@ -24,11 +24,16 @@ $(function(){
             }); // push de un objeto similar a los del tablero: minimo las coordenadas
         });
 
+        // para calcular la distancia desde cada uno de los nodos que no sean obstáculos al nodo final
+        // OJO ==> influye para el nodo inicial ???
+        calculateFinish(tablero);
+
         // 2. COLOCAR EL INICIO EN LA LISTA ABIERTA
         ABIERTA.push({
             antecesor   : '',
             dAcumulada  : 0,
-            dEstimada   : 0,
+            valorAcumAristas : 0,
+            dMeta       : 0,
             coord       : { 'x' : inicio.x, 'y' : inicio.y }
         });
 
@@ -41,8 +46,7 @@ $(function(){
             if(X.coord.x == fin.x && X.coord.y == fin.y){
                 // sacar los antecesores y calcular la solucion
                 break;
-            }
-            else{
+            } else{
                 // actualizar su coste
                 
                 // SEGUIR AQUI
@@ -53,8 +57,8 @@ $(function(){
     }
 
     // Comprueba si la casilla es valida
-    function isValid(row, col){
-        return false;
+    function isValid(tablero, nodo){
+        return nodo.x < 0 || nodo.y < 0 || row > (tablero.length - 1) || col > (tablero[0].length - 1);
     }
 
     // Comprueba si la coordenada/nodo se encuentra en la lista pasada por parametro
@@ -69,5 +73,41 @@ $(function(){
         });
 
         return _in;
+    }
+
+    // Calcula la distancia desde cada nodo del tablero hasta la meta, que siempre sera fija
+    function calculateFinish(tablero, final){
+        var cerrada_aux = Set(CERRADA);
+
+        $.each(tablero, function(i, row){
+            $.each(row, function(j, col){
+                // si no es obstaculo
+                if(!cerrada_aux.has({ 'x' : col.coord.x, 'y' : col.coord.y })){
+                    // sqrt((meta.x - nodoActual.x)^2 + (meta.y - nodoActual.y)^2)
+                    col.dMeta = Math.sqrt(Math.pow(final.x - col.coord.x, 2) + Math.pow(final.y - col.coord.y, 2));
+                }
+            });
+        });
+    }
+
+    // 
+    function calculateAggregateDistance(nodoPadre, nodoHijo){
+        nodoHijo.valorAcumAristas = nodoPadre.valorAcumAristas;
+
+        // calcular la distancia desde el nodo padre al nodo hijo sumandole la que ya tenia anteriormente
+        // si estan en diagonal la distancia es raiz de dos , si no es 1
+        if((nodoHijo.coord.x == nodoPadre.coord.x-1 && nodoHijo.coord.y == nodoHijo.coord.y-1) || 
+            (nodoHijo.coord.x == nodoPadre.coord.x-1 && nodoHijo.coord.y == nodoHijo.coord.y+1) || 
+            (nodoHijo.coord.x == nodoPadre.coord.x+1 && nodoHijo.coord.y == nodoHijo.coord.y-1) || 
+            (nodoHijo.coord.x == nodoPadre.coord.x+1 && nodoHijo.coord.y == nodoHijo.coord.y+1)){
+
+            nodoHijo.valorAcumAristas += Math.sqrt(2);
+        }
+        else{
+            nodoHijo.valorAcumAristas += 1;
+        }
+       
+        nodoHijo.dAcumulada = nodoHijo.valorAcumAristas + nodoHijo.dMeta;
+        // meter en la lista
     }
 });

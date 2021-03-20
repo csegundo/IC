@@ -21,7 +21,7 @@ while
         4. Y = sacar todos los sucesores de X
 
         for each Y -> y
-            aux = f(n) -> ahora toca ir viendo que lista(s) esta
+            aux = h(n) -> ahora toca ir viendo que lista(s) esta
 
             if y NOT in CERRADA
                 calcular su h(y)

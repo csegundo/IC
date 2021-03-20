@@ -47,9 +47,48 @@ $(function(){
                 // sacar los antecesores y calcular la solucion
                 break;
             } else{
-                // actualizar su coste
                 
-                // SEGUIR AQUI
+                //Sucesores de X (vertical y diagonal)
+                for(let i = -1; i < 1; ++i){
+                    for (let j = -1; j < 1; ++j){
+                        //Sucesor Y
+                        let Y = { coord: { 'x' : X.coord.x + i, 'y' : X.coord.y + j }};
+
+                        //Se comprueba si Y está en una posición válida y que no sea el nodo actual
+                        if (isValid(tablero, Y) && ((Y.coord.x!=X.coord.x) && (Y.coord.y != X.coord.y))){
+                            //Datos del nodo
+                            Y.antecesor = X;
+                            Y.dMeta; 
+                            calculateAggregateDistance(X, Y); //valorAcumAristas, dAcumulada
+
+                            //Si el nodo Y no está en CERRADA
+                            if (!isInList(Y.coord, CERRADA)){
+                                if (!isInList(Y.coord, ABIERTA)){ //Si no está en ABIERTA ni en CERRADA --> nodo nuevo
+                                    ABIERTA.push(Y); 
+
+                                } else{ //Ya está en ABIERTA --> comparar la nueva dAcumulada con la anterior
+                                    let YAnterior = ABIERTA.filter(n => n.coord == Y.coord)[0];
+
+                                    if (Y.dAcumulada < YAnterior.dAcumulada){ //Es mejor el nuevo camino
+                                        //Se actualiza el nodo con los nuevos datos
+                                        ABIERTA[ABIERTA.indexOf(YAnterior)] = Y;
+                                    }
+                                }
+
+                                //Ordenar ABIERTA por menor dAcumulada
+                                ABIERTA.sort(function (a, b) {
+                                    if (a.dAcumulada > b.dAcumulada) {
+                                      return 1;
+                                    }
+                                    if (a.dAcumulada < b.dAcumulada) {
+                                      return -1;
+                                    }
+                                    return 0;
+                                });
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -108,6 +147,7 @@ $(function(){
         }
        
         nodoHijo.dAcumulada = nodoHijo.valorAcumAristas + nodoHijo.dMeta;
+        
         // meter en la lista
     }
 });

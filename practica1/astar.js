@@ -2,7 +2,6 @@
  * astar.js es el script que contiene el algoritmo de busuqeda A*
  */
 
-"use strict"
 
 $(function(){
     let ABIERTA = [ ];
@@ -45,37 +44,45 @@ $(function(){
             // X es el nodo META
             if(X.coord.x == fin.x && X.coord.y == fin.y){
                 // sacar los antecesores y calcular la solucion
+                while(true){
+                    var _actual = X.antecesor; // antecesor actual
+                    if(_actual){
+                        SOLUCION.push(_actual.coord);
+                        _actual = _actual.antecesor;
+                    } else{
+                        break;
+                    }
+                }
                 break;
             } else{
-                
-                //Sucesores de X (vertical y diagonal)
-                for(let i = -1; i < 1; ++i){
-                    for (let j = -1; j < 1; ++j){
-                        //Sucesor Y
+                // Sucesores de X (vertical y diagonal)
+                for(let i = -1; i <= 1; ++i){
+                    for (let j = -1; j <= 1; ++j){
+                        // Sucesor Y
                         let Y = { coord: { 'x' : X.coord.x + i, 'y' : X.coord.y + j }};
 
-                        //Se comprueba si Y está en una posición válida y que no sea el nodo actual
-                        if (isValid(tablero, Y) && ((Y.coord.x!=X.coord.x) && (Y.coord.y != X.coord.y))){
-                            //Datos del nodo
+                        // Se comprueba si Y está en una posición válida y que no sea el nodo actual
+                        if (isValid(tablero, Y) || ((Y.coord.x != X.coord.x) && (Y.coord.y != X.coord.y))){
+                            // Datos del nodo
                             Y.antecesor = X;
-                            Y.dMeta; 
-                            calculateAggregateDistance(X, Y); //valorAcumAristas, dAcumulada
+                            // Y.dMeta; 
+                            calculateAggregateDistance(X, Y); // valorAcumAristas, dAcumulada
 
-                            //Si el nodo Y no está en CERRADA
+                            // Si el nodo Y no está en CERRADA
                             if (!isInList(Y.coord, CERRADA)){
                                 if (!isInList(Y.coord, ABIERTA)){ //Si no está en ABIERTA ni en CERRADA --> nodo nuevo
                                     ABIERTA.push(Y); 
 
-                                } else{ //Ya está en ABIERTA --> comparar la nueva dAcumulada con la anterior
+                                } else{ // Ya está en ABIERTA --> comparar la nueva dAcumulada con la anterior
                                     let YAnterior = ABIERTA.filter(n => n.coord == Y.coord)[0];
 
                                     if (Y.dAcumulada < YAnterior.dAcumulada){ //Es mejor el nuevo camino
-                                        //Se actualiza el nodo con los nuevos datos
+                                        // Se actualiza el nodo con los nuevos datos
                                         ABIERTA[ABIERTA.indexOf(YAnterior)] = Y;
                                     }
                                 }
  
-                                //Ordenar ABIERTA por menor dAcumulada
+                                // Ordenar ABIERTA por menor dAcumulada
                                 ABIERTA.sort(function (a, b) {
                                     if (a.dAcumulada > b.dAcumulada) {
                                       return 1;
@@ -95,9 +102,9 @@ $(function(){
         return SOLUCION;
     }
 
-    // Comprueba si la casilla es valida
+    // Comprueba si la casilla es valida, que no se salga del tablero
     function isValid(tablero, nodo){
-        return nodo.x < 0 || nodo.y < 0 || row > (tablero.length - 1) || col > (tablero[0].length - 1);
+        return nodo.x < 0 && nodo.y < 0 && row > (tablero.length - 1) && col > (tablero[0].length - 1);
     }
 
     // Comprueba si la coordenada/nodo se encuentra en la lista pasada por parametro

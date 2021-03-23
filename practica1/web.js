@@ -21,10 +21,16 @@ $(function(){
             _cols = $('input[data-action="cols"]').val();
         
         // Construir el tablero y la matriz para el algoritmo
+        var special = [ 5, 7, 8, 9, 10, 11 ];
+
         _rows = parseInt(_rows);
         _cols = parseInt(_cols);
         var _canvas = $('.astar-canvas'),
             tamCol = 12 / _cols;
+
+        if(special.includes(_cols)){
+            tamCol = _cols;
+        }
 
         _canvas.html('');
         for(var i = 0; i < _rows; i++){
@@ -65,10 +71,9 @@ $(function(){
         });
 
         let MEJOR_CAMINO = astarSearch(tablero, inicio, fin, obs);
-        // let MEJOR_CAMINO = [{ 'x' : 0, 'y' : 1 }, { 'x' : 1, 'y' : 2 }, { 'x' : 2, 'y' : 0 }]; // prueba
 
         $.each(MEJOR_CAMINO, function(i, item){
-            _canvas.find('.dice[data-row="' + item.x + '"][data-col="' + item.y + '"]').html('<i class="fa fa-map-marker"></i>');
+            _canvas.find('.dice[data-row="' + item.x + '"][data-col="' + item.y + '"]').html('<i class="fa fa-map-marker"></i>').addClass('sol');
         });
     });
 

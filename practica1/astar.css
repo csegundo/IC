@@ -23,9 +23,16 @@
     flex-direction: column;
 }
 
-.control-panel .settings .rows-cols{
+.control-panel .settings .rows-cols,
+.control-panel .settings .penal-num{
     display: inline-block;
     width: 60px;
+}
+.control-panel .settings .penal-cost{
+    margin-top: 5px;
+}
+.control-panel .settings .penal-num{
+    width: 100px;
 }
 
 .control-panel .settings .set-rows-cols{

@@ -30,8 +30,7 @@
 
     <!-- Javascript and Stylesheet -->
     <link rel="stylesheet" href="./astar.css">
-    <!-- <script src="./astar.js"></script> -->
-    <script src="./web.js"></script>
+    <script src="./astar.js"></script>
 
     <title>Algoritmo A*</title>
 </head>
@@ -41,21 +40,26 @@
             <!-- Canvas -->
             <div class="col-md-8">
                 <div class="row astar-canvas">
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
-                    <div class="col-4 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
+                    <div class="col-3 dice" data-row="" data-col=""></div>
                 </div>
             </div>
 
@@ -68,9 +72,12 @@
                         <div>
                             <input type="number" class="form-control rows-cols" min="1" max="12" value="5" data-action="rows">
                             filas y 
-                            <input type="number" class="form-control rows-cols" min="1" max="12" value="3" data-action="cols">
+                            <input type="number" class="form-control rows-cols" min="1" max="12" value="4" data-action="cols">
                             columnas
                             <button class="btn btn-primary btn-sm btn-block set-rows-cols">Establecer <i class="fa fa-check-circle-o"></i></button>
+                            <div class="penal-cost">
+                                Coste de la penalización: <input type="number" class="form-control penal-num" min="1" value="2">
+                            </div>
                         </div>
                     </div>
 
@@ -87,6 +94,10 @@
                         <div class="item">
                             <span>Obstáculo <i class="fa fa-tree"></i></span>
                             <button class="btn btn-secondary btn-sm" data-action="3">Colocar</button>
+                        </div>
+                        <div class="item">
+                            <span>Penalización <i class="fa fa-tint"></i></span>
+                            <button class="btn btn-secondary btn-sm" data-action="4">Colocar</button>
                         </div>
                     </div>
 
@@ -135,6 +146,10 @@
                     <tr>
                         <td><i class="fa fa-map-marker"></i></td>
                         <td>Recorrido óptimo</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-tint"></i></td>
+                        <td>Penalización</td>
                     </tr>
                 </tbody>
             </table>

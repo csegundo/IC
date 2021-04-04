@@ -46,8 +46,6 @@ $(function(){
         }
 
         $('.control-panel .execute .start').attr('disabled', false);
-
-        // console.log('TABLERO:', tablero);
     });
 
     // Boton de INICIAR EL ALGORITMO
@@ -76,6 +74,11 @@ $(function(){
         let penalCost = parseInt($('.penal-num').val()) || 0;
 
         let MEJOR_CAMINO = astarSearch(tablero, inicio, fin, obs, pens, penalCost);
+
+        // Borrar solucion anterior si habia ya una
+        $.each($('.dice.sol'), function(i, celda){
+            $(celda).removeClass('sol').html('');
+        });
 
         $.each(MEJOR_CAMINO, function(i, item){
             _canvas.find('.dice[data-row="' + item.x + '"][data-col="' + item.y + '"]').html('<i class="fa fa-map-marker"></i>').addClass('sol');
@@ -126,8 +129,8 @@ $(function(){
     // Boton reset all
     $('.control-panel .execute .reset').click(function(){
         $('.control-panel .elements button').attr('disabled', false);
-        $('input[data-action="rows"]').val(5);
-        $('input[data-action="cols"]').val(3);
+        $('input[data-action="rows"]').val(defaultSettings.rows);
+        $('input[data-action="cols"]').val(defaultSettings.cols);
         $('.astar-canvas').html('');
 
         for(var i = 0; i < defaultSettings.rows; i++){
@@ -208,7 +211,6 @@ $(function(){
         });
 
         // para calcular la distancia desde cada uno de los nodos que no sean obstáculos al nodo final
-        // OJO ==> influye para el nodo inicial ???
         calculateFinish(tablero, fin, CERRADA);
 
         // 2. COLOCAR EL INICIO EN LA LISTA ABIERTA
@@ -265,13 +267,13 @@ $(function(){
 
                             // Si el nodo Y no está en CERRADA
                             if (!isInList(Y.coord, CERRADA)){
-                                if (!isInList(Y.coord, ABIERTA)){ //Si no está en ABIERTA ni en CERRADA --> nodo nuevo
+                                if (!isInList(Y.coord, ABIERTA)){ // Si no está en ABIERTA ni en CERRADA --> nodo nuevo
                                     ABIERTA.push(Y); 
 
                                 } else{ // Ya está en ABIERTA --> comparar la nueva dAcumulada con la anterior
                                     let YAnterior = ABIERTA.filter(n => n.coord.x == Y.coord.x && n.coord.y == Y.coord.y)[0];
 
-                                    if (Y.dAcumulada < YAnterior.dAcumulada){ //Es mejor el nuevo camino
+                                    if (Y.dAcumulada < YAnterior.dAcumulada){ // Es mejor el nuevo camino
                                         // Se actualiza el nodo con los nuevos datos
                                         ABIERTA[ABIERTA.indexOf(YAnterior)] = Y;
                                     }
@@ -298,7 +300,6 @@ $(function(){
     }
 
     // Comprueba si la casilla es valida, que no se salga del tablero
-    // TODO ver si es OBSTACULO
     function isValid(tablero, nodo){
         var ok = true;
 
@@ -312,7 +313,6 @@ $(function(){
             ok = false;
         }
         return ok;
-        // return nodo.coord.x >= 0 && nodo.coord.y >= 0 && nodo.coord.x <= (tablero.length - 1) && nodo.coord.y <= (tablero[0].length - 1);
     }
 
     // Comprueba si la coordenada/nodo se encuentra en la lista pasada por parametro
@@ -331,21 +331,14 @@ $(function(){
 
     // Calcula la distancia desde cada nodo del tablero hasta la meta, que siempre sera fija
     function calculateFinish(tablero, final, listaCerrada){
-        var cerrada_aux = new Set(listaCerrada);
-
         $.each(tablero, function(i, row){
             $.each(row, function(j, col){
-                // si no es obstaculo
-                // TODO: ver si es obstaculo ASI no va
-                if(!cerrada_aux.has({ coord : {'x' : col.coord.x, 'y' : col.coord.y } })){
-                    // sqrt((meta.x - nodoActual.x)^2 + (meta.y - nodoActual.y)^2)
-                    col.dMeta = Math.sqrt(Math.pow(final.x - col.coord.x, 2) + Math.pow(final.y - col.coord.y, 2));
-                }
+                // sqrt((meta.x - nodoActual.x)^2 + (meta.y - nodoActual.y)^2)
+                col.dMeta = Math.sqrt(Math.pow(final.x - col.coord.x, 2) + Math.pow(final.y - col.coord.y, 2));
             });
         });
     }
 
-    // 
     function calculateAggregateDistance(nodoPadre, nodoHijo){
         nodoHijo.valorAcumAristas = nodoPadre.valorAcumAristas;
 
@@ -356,11 +349,6 @@ $(function(){
         ok = ok || (nodoHijo.coord.x == nodoPadre.coord.x-1 && nodoHijo.coord.y == nodoPadre.coord.y+1);
         ok = ok || (nodoHijo.coord.x == nodoPadre.coord.x+1 && nodoHijo.coord.y == nodoPadre.coord.y-1);
         ok = ok || (nodoHijo.coord.x == nodoPadre.coord.x+1 && nodoHijo.coord.y == nodoPadre.coord.y+1);
-
-        /*if((nodoHijo.coord.x == nodoPadre.coord.x-1 && nodoHijo.coord.y == nodoHijo.coord.y-1) || 
-            (nodoHijo.coord.x == nodoPadre.coord.x-1 && nodoHijo.coord.y == nodoHijo.coord.y+1) || 
-            (nodoHijo.coord.x == nodoPadre.coord.x+1 && nodoHijo.coord.y == nodoHijo.coord.y-1) || 
-            (nodoHijo.coord.x == nodoPadre.coord.x+1 && nodoHijo.coord.y == nodoHijo.coord.y+1)){*/
 
         if(ok){
             nodoHijo.valorAcumAristas += Math.sqrt(2);
@@ -375,9 +363,5 @@ $(function(){
         if(nodoHijo.penalizacion && nodoHijo.penalizacion != 0){ // si tengo penalizacion
             nodoHijo.dAcumulada += nodoHijo.penalizacion;
         }
-       
-        // nodoHijo.dAcumulada = nodoHijo.valorAcumAristas + nodoHijo.dMeta;
-        
-        // meter en la lista
     }
 });

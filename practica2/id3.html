@@ -26,10 +26,36 @@
         crossorigin="anonymous" />
 
     <script src="id3.js"></script>
+    <style>h1,h3{text-align:center;}label{margin-bottom:5px;}input{margin-bottom:15px;}div.separator{border-bottom:1px solid #ccc;margin:10px 0;}.info{font-weight:bold;display:block;margin-bottom:10px;}.info .file{font-weight:400;}</style>
     
     <title>ID3</title>
 </head>
 <body>
-    <button>click</button>
+    <div class="container">
+        <h1>Algortimo ID3</h1>
+
+        <div class="separator"></div>
+
+        <div class="form-group">
+            <h3>Carga de datos</h3>
+            <label for="attrs">Cargar el archivo con los atributos</label>
+            <input type="file" class="form-control" name="attrs">
+
+            <label for="content">Cargar el archivo con el contenido (lista de ejemplos)</label>
+            <input type="file" class="form-control" name="content">
+
+            <button class="btn btn-primary load">Cargar datos <i class="fa fa-upload"></i></button>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="form-group">
+            <h3>Ejecución del algoritmo</h3>
+            <span class="info">Archivo de atributos: <span class="file attrs-file"></span></span>
+            <span class="info">Archivo de datos: <span class="file dataset-file"></span></span>
+
+            <button class="btn btn-primary execute" disabled>Ejecutar el algoritmo <i class="fa fa-circle-o-notch fa-spin"></i></button>
+        </div>
+    </div>
 </body>
 </html>

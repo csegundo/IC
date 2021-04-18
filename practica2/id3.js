@@ -1,4 +1,41 @@
 $(function(){
+    // Para probar la carga y lectura de archivos
+    var $ATRIBUTOS = [];
+    var $DATASET = [];
+
+    $('.load').click(function(){
+        var attrs = $('input[name="attrs"]').get(0).files;
+        var examples = $('input[name="content"]').get(0).files;
+
+        if(attrs.length > 0 && examples.length > 0){
+            attrs = attrs[0];
+            examples = examples[0];
+
+            $('.info .file.attrs-file').html(attrs.name);
+            $('.info .file.dataset-file').html(examples.name);
+
+            $.each([ attrs, examples ], function(i, file){
+                var reader = new FileReader();
+                reader.readAsText(file, "UTF-8");
+                reader.onload = function(event){
+                    if(i == 0){
+                        $ATRIBUTOS = event.target.result;
+                        console.log('$ATRIBUTOS', $ATRIBUTOS);
+                    } else{
+                        $DATASET = event.target.result;
+                        console.log('$DATASET', $DATASET);
+                    }
+                };
+            });
+
+            $('button.execute').prop('disabled', false);
+        } else{
+            alert('IMPORTANTE. Es obligatorio cargar los dos archivos.');
+        }
+    });
+    ///////////////////////////////////////////////
+
+
     var atributos   = [ "tamaño", "timbre", "portero", "clase" ];
     var dataset     = [
         "pequeño,uno,no,+",
@@ -9,7 +46,7 @@ $(function(){
         "grande,uno,si,-"
     ];
 
-    $('button').click(function(){
+    $('button.a').click(function(){
         // cuando hagamos la 2ª y 3ª vuelta llamar a algoritmo() para volver a calcular las p, n, meritos..
         var datos = algoritmo(atributos, dataset);
         console.debug('OBJ', datos);

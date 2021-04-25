@@ -1,8 +1,10 @@
-$(function(){
-    // Para probar la carga y lectura de archivos
-    var $ATRIBUTOS = [];
-    var $DATASET = [];
+// Para probar la carga y lectura de archivos
+var ATRIBUTOS = [];
+var DATASET = [];
+var DATASETAUX = [];
+var ATRIBUTOSAUX = [];
 
+$(function(){
     $('.load').click(function(){
         var attrs = $('input[name="attrs"]').get(0).files;
         var examples = $('input[name="content"]').get(0).files;
@@ -19,11 +21,13 @@ $(function(){
                 reader.readAsText(file, "UTF-8");
                 reader.onload = function(event){
                     if(i == 0){
-                        $ATRIBUTOS = event.target.result;
-                        console.log('$ATRIBUTOS', $ATRIBUTOS);
+                        ATRIBUTOS = event.target.result.split(',');
+                        ATRIBUTOSAUX = event.target.result.split(',');
+                        console.log('$ATRIBUTOS', ATRIBUTOS);
                     } else{
-                        $DATASET = event.target.result;
-                        console.log('$DATASET', $DATASET);
+                        DATASET = event.target.result.split('\n');
+                        DATASETAUX = event.target.result.split('\n');
+                        console.log('$DATASET', DATASET);
                     }
                 };
             });
@@ -33,44 +37,63 @@ $(function(){
             alert('IMPORTANTE. Es obligatorio cargar los dos archivos.');
         }
     });
-    ///////////////////////////////////////////////
 
-
-    var atributos   = [ "tamaño", "timbre", "portero", "clase" ];
-    var dataset     = [
-        "pequeño,uno,no,+",
-        "pequeño,varios,si,-",
-        "mediano,uno,no,+",
-        "grande,varios,no,-",
-        "pequeño,uno,si,+",
-        "grande,uno,si,-"
-    ];
-
-    $('button.a').click(function(){
-        // cuando hagamos la 2ª y 3ª vuelta llamar a algoritmo() para volver a calcular las p, n, meritos..
-        var datos = algoritmo(atributos, dataset);
-        console.debug('OBJ', datos);
-        
-        // sacamos el MENOR merito
-        var level = {}, _merito = 99999999999;
-        $.each(datos, function(i, attr){
-            if(attr.merito < _merito){
-                _merito = attr.merito;
-                level = attr;
-                delete(level.merito);
-            }
-        });
-
-        console.debug('MERITO', _merito);
-        console.debug('NIVEL', level);
-
-        // 1. En "level" tenemos las ramas que hay que recorrer ($.each)
-        // 2. Para cada rama del $.each ==> sacar las filas que tengan ese "tamaño" (atributo) ==> filtrar
-        // 3. Cuando tengamos esas filas, ver si son todas + o - para descartar ==> si son != entonces volver a hacer todo (llamar a algortimo())
+    $('.execute').click(function(){
+        console.warn('--------------------------');
+        recursivo(ATRIBUTOS, DATASET);
     });
 });
 
 //////////////////////////////////////////////////
+
+function recursivo(atributos, dataset){
+    var datos = algoritmo(atributos, dataset);
+    
+    // sacamos el MENOR merito
+    var level = {}, _merito = 99999999999, _key = "";
+    $.each(datos, function(attrKey, attr){
+        if(attr.merito < _merito){
+            _key = attrKey;
+            _merito = attr.merito;
+            level = attr;
+            console.debug('NIVEL', level);
+            delete(level.merito);
+        }
+    });
+
+    $.each(level, function(rama, valor){
+        DATASETAUX = filtrar(rama, DATASETAUX);
+        console.debug('ESTAMOS EN LA RAMA', rama);
+
+        if(valor.positivo === 0 || valor.negativo === 0){
+            console.warn('FINALIZADO', (valor.negativo === 0 ? "si" : "no") + " se puede salir a jugar");
+        } else{
+            var _attrs = ATRIBUTOSAUX;
+            _attrs.splice(_attrs.indexOf(_key), 1);
+            ATRIBUTOSAUX = _attrs;
+            recursivo(_attrs, DATASETAUX);
+        }
+
+        // volver a cargar la variable DATASET
+        DATASETAUX = DATASET;
+        ATRIBUTOSAUX = ATRIBUTOS;
+    });
+}
+
+function filtrar(nombreRama, datos){
+    var _filter = [];
+
+    $.each(datos, function(i, item){
+        var idx = item.split(',').indexOf(nombreRama);
+        if(idx >= 0){
+            var aux = item.split(',');
+            aux.splice(idx, 1);
+            _filter.push(aux.join(','));
+        }
+    });
+
+    return _filter;
+}
 
 function algoritmo(atributos, dataset){
     var datos = {};
@@ -81,18 +104,18 @@ function algoritmo(atributos, dataset){
     }
 
     $.each(dataset, function(i, fila){
-        fila = fila.split(',');
-        var sol = fila[fila.length - 1]; // + o -
+        fila = fila.replace('\r', '').split(',');
+        var sol = fila[fila.length - 1]; // si o no
 
         for(var i = fila.length - 2; i >= 0; i--){
             if(!datos[atributos[i]][fila[i]]){
                 datos[atributos[i]][fila[i]] = {
-                    positivo    : sol === "+" ? 1 : 0,
-                    negativo    : sol === "-" ? 1 : 0,
+                    positivo    : sol === "si" ? 1 : 0,
+                    negativo    : sol === "no" ? 1 : 0,
                     total       : 1
                 };
             } else{
-                if(sol === "+"){
+                if(sol === "si"){
                     datos[atributos[i]][fila[i]].positivo++;
                 } else{
                     datos[atributos[i]][fila[i]].negativo++;
@@ -123,8 +146,6 @@ function merito(data, key, N){
     data[key].merito = merito;
 }
 
-// NOTA: ver si p/n == 0 para ver que hacer cuando log2(x) = infinity
-// creemos que si p/n == 0 entonces infor(p, n) devuelve 0 <--- BIEN ???
 function infor(p, n){
     return (p == 0 || n == 0) ? 0 : -p * Math.log2(p) -n * Math.log2(n);
 }

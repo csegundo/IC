@@ -4,6 +4,8 @@ var DATASET = [];
 var DATASETAUX = [];
 var ATRIBUTOSAUX = [];
 
+var IT = 1;
+
 $(function(){
     $('.load').click(function(){
         var attrs = $('input[name="attrs"]').get(0).files;
@@ -40,13 +42,13 @@ $(function(){
 
     $('.execute').click(function(){
         console.warn('--------------------------');
-        recursivo(ATRIBUTOS, DATASET);
+        recursivo(ATRIBUTOS, DATASET, IT);
     });
 });
 
 //////////////////////////////////////////////////
 
-function recursivo(atributos, dataset){
+function recursivo(atributos, dataset, it){
     var datos = algoritmo(atributos, dataset);
     
     // sacamos el MENOR merito
@@ -61,7 +63,11 @@ function recursivo(atributos, dataset){
         }
     });
 
+    $('.tree').append(`<li class="nodo" style="margin-left: ${it * 10}px;">${_key}</li>`);
+
     $.each(level, function(rama, valor){
+        $('.tree').append(`<li class="rama" style="margin-left: ${it * 20}px;">${rama}</li>`);
+
         DATASETAUX = filtrar(rama, DATASETAUX);
         console.debug('ESTAMOS EN LA RAMA', rama);
 
@@ -71,7 +77,7 @@ function recursivo(atributos, dataset){
             var _attrs = ATRIBUTOSAUX;
             _attrs.splice(_attrs.indexOf(_key), 1);
             ATRIBUTOSAUX = _attrs;
-            recursivo(_attrs, DATASETAUX);
+            recursivo(_attrs, DATASETAUX, it + 1);
         }
 
         // volver a cargar la variable DATASET

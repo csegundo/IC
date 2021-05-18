@@ -44,6 +44,8 @@ for i in range(len(data)):
 # print(dataset)
 
 sumas = [0.0] * 4 # siempre hay 4 valores -> almacenar en cada posicion la suma de cada columna
+
+# diccionario <clase, mediaClase>
 mediasClases = dict()
 for clase in dataset:
     for fila in dataset[clase]:
@@ -54,4 +56,14 @@ for clase in dataset:
     mediasClase = media(sumas, len(dataset[clase]))
     mediasClases[dataset[clase][0][-1]] = mediasClase
 
+
+#muestraEntrada - mediaClase
+
+restas = [0.0] *2 #numero de clases
+
+for mediasClase in dataset:
+     for fila in dataset[clase]:
+        for i in range(numAtributos):
+            sumas[i] += float(fila[i])
+    
 print(mediasClases)

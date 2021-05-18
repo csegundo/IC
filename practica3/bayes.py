@@ -1,6 +1,6 @@
 # ALGORITMO DE BAYES
 numAtributos = 4 # see: http://archive.ics.uci.edu/ml/datasets/Iris
-
+numClases = 2
 
 # Funciones
 def media(suma, N):
@@ -57,13 +57,47 @@ for clase in dataset:
     mediasClases[dataset[clase][0][-1]] = mediasClase
 
 
-#muestraEntrada - mediaClase
 
-restas = [0.0] *2 #numero de clases
+files = [ 'TestIris02.txt']#, 'TestIris02.txt', 'TestIris03.txt' ]
 
-for mediasClase in dataset:
-     for fila in dataset[clase]:
-        for i in range(numAtributos):
-            sumas[i] += float(fila[i])
-    
 print(mediasClases)
+print("---------")
+
+for filename in files:
+    dictRestas = dict()
+
+    file = open(filename, 'r')
+    muestra = file.readline().replace('\n', '').split(',')
+
+    # START (1) recorrer ambas clases para sacar los valores de las medias
+    for nombreClase in mediasClases: 
+        if (nombreClase not in dictRestas):
+            dictRestas[nombreClase] = [0.0] * numAtributos
+        
+        # START (2) sumar todas las medias
+        for i in range(len(mediasClases[nombreClase])):
+            dictRestas[nombreClase][i] = float(muestra[i]) - mediasClases[nombreClase][i]
+        # END (2)
+    # END (1)
+    print(dictRestas)
+
+    sumaTotal = 0.0
+    sumaMin = 999999.0
+    solClase = ''
+    # START (3) de la diferencia entre muestra/media de cada clase nos quedamos con la MENOR -> Majanouris
+    for nombreClase in dictRestas:
+        lista = dictRestas[nombreClase]
+        for it in range(len(lista)):
+            sumaTotal += pow(lista[it], 2)
+        
+        print("Esta es la suma:",sumaTotal)
+        
+        if(sumaTotal < sumaMin):
+            sumaMin = sumaTotal
+            solClase = nombreClase
+        
+        sumaTotal = 0.0
+    # END (3)
+
+    print("La solucion para " + filename + " es: " + solClase)
+

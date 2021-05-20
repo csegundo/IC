@@ -13,13 +13,6 @@ def media(suma, N):
 
     return retSuma
 
-
-# punto -> 5.1,3.5,1.4,0.2
-# media -> de cada clase
-def aproximacion(punto, media):
-    return 0
-    
-    
     
 # Leer el fichero general
 IrisClases = open('Iris2Clases.txt', 'r')
@@ -55,13 +48,13 @@ for clase in dataset:
     # media de cada clase
     mediasClase = media(sumas, len(dataset[clase]))
     mediasClases[dataset[clase][0][-1]] = mediasClase
+    sumas = numAtributos*[0.0]
 
 
+files = [ 'TestIris01.txt', 'TestIris02.txt', 'TestIris03.txt' ]
 
-files = [ 'TestIris02.txt']#, 'TestIris02.txt', 'TestIris03.txt' ]
-
-print(mediasClases)
-print("---------")
+# print(mediasClases)
+# print("---------")
 
 for filename in files:
     dictRestas = dict()
@@ -79,7 +72,7 @@ for filename in files:
             dictRestas[nombreClase][i] = float(muestra[i]) - mediasClases[nombreClase][i]
         # END (2)
     # END (1)
-    print(dictRestas)
+    # print(dictRestas)
 
     sumaTotal = 0.0
     sumaMin = 999999.0
@@ -89,8 +82,6 @@ for filename in files:
         lista = dictRestas[nombreClase]
         for it in range(len(lista)):
             sumaTotal += pow(lista[it], 2)
-        
-        print("Esta es la suma:",sumaTotal)
         
         if(sumaTotal < sumaMin):
             sumaMin = sumaTotal
